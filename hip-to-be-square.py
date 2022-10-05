@@ -4,14 +4,13 @@ from termcolor import colored
 
 # Create a class for the Canvas
 class Canvas:
-    # Initilaize with size of Canvas
     def __init__(self, width, height):
         self._x = width
         self._y = height
-        self._canvas = [' ' for y in range(self._y) for x in range(self._x)]
+        self._canvas = [[' ' for y in range(self._y)] for x in range(self._x)]
 
     def hitsWall(self, point):
-        return point[0] < 0 or point[0] >= self._x or point[1] or point[1] >= self._y
+        return point[0] < 0 or point[0] >= self._x or point[1] < 0 or point[1] >= self._y
 
     def setPos(self, pos, mark):
         self._canvas[pos[0]][pos[1]] = mark
@@ -22,10 +21,8 @@ class Canvas:
     def print(self):
         self.clear()
         for y in range(self._y):
-            print( ' '.join([col[y] for col in self._canvas]))
+            print(' '.join([col[y] for col in self._canvas]))
 
-
-# Create a class for Terminal Scribe
 class TerminalScribe:
     def __init__(self, canvas):
         self.canvas = canvas
@@ -36,14 +33,14 @@ class TerminalScribe:
 
     def up(self):
         pos = [self.pos[0], self.pos[1]-1]
-        if not self.canvas.hitswall(pos):
+        if not self.canvas.hitsWall(pos):
             self.draw(pos)
 
     def down(self):
         pos = [self.pos[0], self.pos[1]+1]
         if not self.canvas.hitsWall(pos):
             self.draw(pos)
-    
+
     def right(self):
         pos = [self.pos[0]+1, self.pos[1]]
         if not self.canvas.hitsWall(pos):
@@ -60,6 +57,7 @@ class TerminalScribe:
         self.canvas.setPos(self.pos, colored(self.mark, 'red'))
         self.canvas.print()
         time.sleep(self.framerate)
+
 
 canvas = Canvas(30, 30)
 scribe = TerminalScribe(canvas)
